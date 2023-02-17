@@ -29,7 +29,7 @@ def get_vacansies_statistics_hh(language):
     vacansies_processed = len(salaries)
     if vacansies_processed:
         average_salary = sum(salaries) / vacansies_processed
-        average_salary_statistics = {'vacansies_found': vacansies_found, 'vacansies_processed': vacansies_processed, 'average_salary': int(average_salary)}
+    average_salary_statistics = {'vacansies_found': vacansies_found, 'vacansies_processed': vacansies_processed, 'average_salary': int(average_salary)}
     return average_salary_statistics
 
 
@@ -82,7 +82,6 @@ def make_table(languages_params, title):
     table_payload = [['Язык программирования', 'Вакансий найдено', 'Вакансий обработано', 'Средняя зарплата']]
     for language, params in languages_params.items():
         table_payload.append([language, params['vacansies_found'], params['vacansies_processed'], params['average_salary']])
-        #
         table_instance = AsciiTable(table_payload, title)
         table_instance.justify_columns[2] = 'right'
     return table_instance.table
