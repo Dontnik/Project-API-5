@@ -25,7 +25,6 @@ def get_vacansies_statistics_hh(language):
                 predicted_salary = predict_rub_salary(salary['from'], salary['to'], salary['currency'])
                 if predicted_salary:
                     salaries.append(predicted_salary)
-        print(f'скачиваю страницу {page}')
         page += 1
     vacansies_processed = len(salaries)
     if vacansies_processed:
@@ -59,8 +58,6 @@ def get_vacansies_statistics_sj(secret_key, language):
         response.raise_for_status()
         response_content = response.json()
         more = response_content['more']
-        print(more)
-        print(page)
         if more:
             page += 1
         else:
