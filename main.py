@@ -4,13 +4,15 @@ from terminaltables import AsciiTable
 from dotenv import load_dotenv
 
 
-def get_vacansies_hh(language):
+def get_vacansies_statistics_hh(language):
     salaries = []
     url = 'https://api.hh.ru/vacancies'
     page = 1
     pages = 2
+    area_id = 1
     while page < pages:
-        payload = {'text': language, 'area': '1', 'page': page}
+        payload = {'text': language, 'area': area_id, 'page': page}
+
         response = requests.get(url, params=payload)
         response.raise_for_status()
         pages = response.json()['pages']
@@ -42,14 +44,15 @@ def predict_rub_salary(salary_from, salary_to, salary_currency):
         return salary_to * 0.8
 
 
-def get_vacansies_sj(secret_key, language):
+def get_vacansies_statistics_sj(secret_key, language):
     vacansies_found = 0
     salaries = []
     headers = {'X-Api-App-Id': f'{secret_key}'}
     page = 0
+    town = 4
     pages = 1
     while True:
-        payload = {'keyword': language, 'town': '4', 'page': page}
+        payload = {'keyword': language, 'town': town, 'page': page}
         url = '	https://api.superjob.ru/2.0/vacancies/'
         response = requests.get(url, headers=headers, params=payload)
         response.raise_for_status()
@@ -90,10 +93,10 @@ if __name__ == "__main__":
     load_dotenv()
     secret_key = os.getenv('SECRET_KEY')
     languages = ['Python', 'Java', 'C++', 'PHP']
-    language_params_hh = {}
-    language_params_sj = {}
+    hh_language_params = {}
+    sj_language_params = {}
     for language in languages:
-        language_params_hh[language] = get_vacansies_hh(language)
-        language_params_sj[language] = get_vacansies_sj(secret_key, language)
-    print(make_table(language_params_sj, 'Superjob Moscow'))
-    print(make_table(language_params_hh, 'HeadHunter Moscow'))
+        hh_language_params[language] = get_vacansies_hh(language)
+        sj_language_params[language] = get_vacansies_sj(secret_key, language)
+    print(make_table(hh_language_params, 'Superjob Moscow'))
+    print(make_table(sj_language_params, 'HeadHunter Moscow'))
