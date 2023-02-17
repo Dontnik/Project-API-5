@@ -15,9 +15,10 @@ def get_vacansies_statistics_hh(language):
 
         response = requests.get(url, params=payload)
         response.raise_for_status()
-        pages = response.json()['pages']
-        vacansies = response.json()['items']
-        vacansies_found = response.json()['found']
+        response_content = response.json()
+        pages = response_content['pages']
+        vacansies = response_content['items']
+        vacansies_found = response_content['found']
         for vacancy in vacansies:
             salary = vacancy['salary']
             if salary:
@@ -56,15 +57,16 @@ def get_vacansies_statistics_sj(secret_key, language):
         url = '	https://api.superjob.ru/2.0/vacancies/'
         response = requests.get(url, headers=headers, params=payload)
         response.raise_for_status()
-        more = response.json()['more']
+        response_content = response.json()
+        more = response_content['more']
         print(more)
         print(page)
         if more:
             page += 1
         else:
             break
-        vacansies_found = response.json()['total']
-        for vacancy in response.json()['objects']:
+        vacansies_found = response_content['total']
+        for vacancy in response_content['objects']:
             salary_currency = vacancy['currency']
             salary_to = vacancy['payment_to']
             salary_from = vacancy['payment_from']
@@ -96,7 +98,7 @@ if __name__ == "__main__":
     hh_language_params = {}
     sj_language_params = {}
     for language in languages:
-        hh_language_params[language] = get_vacansies_hh(language)
-        sj_language_params[language] = get_vacansies_sj(secret_key, language)
+        hh_language_params[language] = get_vacansies_statistics_hh(language)
+        sj_language_params[language] = get_vacansies_statistics_sj(secret_key, language)
     print(make_table(hh_language_params, 'Superjob Moscow'))
     print(make_table(sj_language_params, 'HeadHunter Moscow'))
