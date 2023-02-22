@@ -29,6 +29,8 @@ def get_vacansies_statistics_hh(language):
     vacansies_processed = len(salaries)
     if vacansies_processed:
         average_salary = sum(salaries) / vacansies_processed
+    else:
+        average_salary = 0
     average_salary_statistics = {'vacansies_found': vacansies_found, 'vacansies_processed': vacansies_processed, 'average_salary': int(average_salary)}
     return average_salary_statistics
 
